@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Cursor movement blocking** - New `-blockMovement` flag to block cursor movement in addition to clicks
 - **Configurable movement timeout** - `-movementTime` flag for separate movement blocking duration (defaults to `-time` value)
 - **One-command installation** - Quick install via `curl | sudo bash`
+- **Configuration management tools**:
+  - `scripts/configure.sh` - Easy settings adjustment without editing XML
+  - `scripts/status.sh` - View current configuration and service status
 - **Automated install/uninstall scripts** - Professional LaunchDaemon setup with auto-start on boot
 - **GitHub Actions workflow** - Automated release builds and publishing on version tags
 - **Comprehensive test suite** - 19 automated tests covering installation validation and CLI behavior
@@ -19,7 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Professional documentation**:
   - `CLAUDE.md` - Development guide with architecture, testing, and release process
   - `CREDITS.md` - Proper attribution to original author
-  - Updated README with comprehensive installation guide
+  - `CHANGELOG.md` - Version history following Keep a Changelog format
+  - `.gitignore` - Standard gitignore for build artifacts
+  - Updated README with comprehensive installation guide and settings adjustment section
 
 ### Changed
 - Version output format now includes patch version: "TouchGuard v1.5.0"

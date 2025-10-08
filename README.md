@@ -46,24 +46,56 @@ TouchGuard is now running and will automatically start every time you boot your 
 sudo ./uninstall.sh
 ```
 
-**To customize settings** (e.g., change the time interval or enable movement blocking):
+----------------
+## Adjusting Settings
 
-Edit `/Library/LaunchDaemons/com.syntaxsoft.touchguard.plist` and modify the `ProgramArguments` section:
+After installation, you can easily adjust the time intervals or enable/disable features:
 
-```xml
-<key>ProgramArguments</key>
-<array>
-    <string>/usr/local/bin/TouchGuard</string>
-    <string>-time</string>
-    <string>0.2</string>
-    <!-- Optional: Add movement blocking -->
-    <string>-blockMovement</string>
-    <string>-movementTime</string>
-    <string>0.1</string>
-</array>
+### Quick Adjustment
+
+Change settings with a single command:
+
+```bash
+# Change time interval
+sudo ./configure.sh --time 0.15
+
+# Enable movement blocking
+sudo ./configure.sh --block-movement
+
+# Set different intervals for clicks and movement
+sudo ./configure.sh --time 0.2 --movement-time 0.1
+
+# Disable movement blocking
+sudo ./configure.sh --disable-movement
 ```
 
-Then restart the service:
+### Interactive Configuration
+
+Run without arguments to be prompted for settings:
+
+```bash
+sudo ./configure.sh
+```
+
+### Check Current Settings
+
+View your current configuration:
+
+```bash
+./status.sh
+```
+
+This shows:
+- Service status (running/stopped)
+- Current time intervals
+- Movement blocking status
+- File locations
+- Recent logs
+
+### Advanced: Manual Configuration
+
+If you prefer to edit the configuration file directly, you can modify `/Library/LaunchDaemons/com.syntaxsoft.touchguard.plist`. After editing, restart the service:
+
 ```bash
 sudo launchctl unload /Library/LaunchDaemons/com.syntaxsoft.touchguard.plist
 sudo launchctl load -w /Library/LaunchDaemons/com.syntaxsoft.touchguard.plist
