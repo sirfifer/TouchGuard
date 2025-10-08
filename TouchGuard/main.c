@@ -16,7 +16,7 @@
 
 #define MAJOR_VERSION  1
 #define MINOR_VERSION  5
-#define PATCH_VERSION  0
+#define PATCH_VERSION  1
 
 
 #define DISABLE_TAP_PB               1

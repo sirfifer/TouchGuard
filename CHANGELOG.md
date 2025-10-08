@@ -5,6 +5,27 @@ All notable changes to TouchGuard will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2025-10-07
+
+### Added
+- **Configuration management tools** - User-friendly scripts for adjusting settings without manual XML editing
+  - `scripts/configure.sh` - Interactive and command-line tool to adjust time intervals and enable/disable features
+  - `scripts/status.sh` - Display current configuration, service status, and quick actions
+- **Prominent "Adjusting Settings" section in README** - Clear documentation for post-installation configuration
+
+### Changed
+- Install completion messages now highlight configuration tools
+- README structure improved with settings adjustment as a primary workflow
+- Quick install script shows configuration examples after installation
+
+### Fixed
+- Users no longer need to manually edit XML plist files to adjust settings
+- Eliminated error-prone manual configuration process
+
+### User Experience Improvement
+**Before**: Edit XML manually, remember launchctl commands
+**After**: Single command: `sudo ./configure.sh --time 0.15`
+
 ## [1.5.0] - 2025-10-07
 
 ### Added
@@ -66,5 +87,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+[1.5.1]: https://github.com/sirfifer/TouchGuard/releases/tag/v1.5.1
 [1.5.0]: https://github.com/sirfifer/TouchGuard/releases/tag/v1.5.0
 [1.4]: https://github.com/thesyntaxinator/TouchGuard/releases/tag/1.4
