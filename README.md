@@ -7,26 +7,91 @@ Disables Mac touchpad for a user-specified amount of time each time a key is pre
 *NOTE: Must be run with administrative privileges.*
 
 ----------------
-## Usage (non-tech savvy)
-- Open Terminal, type "chmod +x ", drag the drop the downloaded file into the Terminal window, and press enter (this only needs to be done once after downloading the file).
-- Then type "sudo", drag and drop the downloaded file into the Terminal window, type " -time 0.2" and press enter. You may be prompted for your password; if so, type it and presss enter. Note that you will not see the cursor move while typing your password -- this is normal and done for security reasons.
-- Keep the terminal window open. If you close the window, the program will exit. You can hide the window by typing "command-h".
-- You will need to manually relaunch the app each time you restart your computer using the above sequence of steps. To auto-start after you restart your computer, see an unofficial extension of the project at <a href="https://github.com/amanagr/TouchGuard" target="_blank">amanagr/TouchGuard</a>.
+## Quick Install (Recommended)
 
-------------------
-## Sample command line usage (for the more tech-savvy)
-```
-# make the downloaded release file executable
-chmod +x TouchGuard
-# run it
-sudo ./TouchGuard -time 0.2
+Download the latest release and run the installer:
+
+```bash
+# Navigate to the downloaded folder
+cd path/to/TouchGuard
+
+# Run the installer (will prompt for your password)
+sudo ./install.sh
 ```
 
-The above launches TouchGuard with a time interval of 200 ms (disables the touchpad for 200 ms each time a key is pressed on the keyboard). I have found this to be effective for me -- if you are still having issues (e.g. you can't use the trackpad immediately after typing, or your cursor still jumps), you can adjust the time interval up or down as needed.
+That's it! TouchGuard is now running and will automatically start every time you boot your Mac.
 
-*Note: You will need to manually relaunch the app each time you restart your computer. A future goal is to create an installer with an option to automatically run the program (with elevated privileges) every time the computer starts. If you would like to work on this, feel free to fork the project and let me know if you get it working (see contact info under "Support" below).*
+**To uninstall:**
+```bash
+sudo ./uninstall.sh
+```
+
+**To customize settings** (e.g., change the time interval or enable movement blocking):
+
+Edit `/Library/LaunchDaemons/com.syntaxsoft.touchguard.plist` and modify the `ProgramArguments` section:
+
+```xml
+<key>ProgramArguments</key>
+<array>
+    <string>/usr/local/bin/TouchGuard</string>
+    <string>-time</string>
+    <string>0.2</string>
+    <!-- Optional: Add movement blocking -->
+    <string>-blockMovement</string>
+    <string>-movementTime</string>
+    <string>0.1</string>
+</array>
+```
+
+Then restart the service:
+```bash
+sudo launchctl unload /Library/LaunchDaemons/com.syntaxsoft.touchguard.plist
+sudo launchctl load -w /Library/LaunchDaemons/com.syntaxsoft.touchguard.plist
+```
+
+----------------
+## Manual Usage (Advanced)
+
+If you prefer to run TouchGuard manually without installing it as a system service:
+
+```bash
+# Make the binary executable
+chmod +x TouchGuard/TouchGuard
+
+# Run it (Terminal window must stay open)
+sudo ./TouchGuard/TouchGuard -time 0.2
+```
+
+**Additional options:**
+- `-time <seconds>`: Duration to disable touchpad clicks (default: 0.001)
+- `-blockMovement`: Also block cursor movement (not just clicks)
+- `-movementTime <seconds>`: Duration to block movement (defaults to `-time` value)
+- `-nodebug`: Suppress debug messages
+- `-version`: Display version information
+
+**Examples:**
+```bash
+# Block clicks for 200ms
+sudo ./TouchGuard/TouchGuard -time 0.2
+
+# Block clicks for 200ms and cursor movement for 100ms
+sudo ./TouchGuard/TouchGuard -time 0.2 -blockMovement -movementTime 0.1
+```
+
+The time interval of 200ms (0.2 seconds) works well for most users. If you're still experiencing issues (cursor jumps while typing) or the trackpad feels unresponsive after typing, adjust the interval up or down as needed.
+
+----------------
+## Credits
+
+**Original Author**: [Prag Batra (SyntaxSoft)](https://github.com/thesyntaxinator)
+**Original Repository**: https://github.com/thesyntaxinator/TouchGuard
+
+This fork adds cursor movement blocking, installation scripts, and LaunchDaemon support for easier deployment. See [CREDITS.md](CREDITS.md) for full attribution.
 
 ----------------
 ## Support
-Questions? Comments? Feedback? Issues? Open a new issue [here](https://github.com/thesyntaxinator/TouchGuard/issues) or email syntaxsoftsupport@icloud.com.
+
+**For this fork**: Open an issue at https://github.com/sirfifer/TouchGuard/issues
+
+**Original project**: https://github.com/thesyntaxinator/TouchGuard/issues or email syntaxsoftsupport@icloud.com
 
