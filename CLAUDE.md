@@ -110,23 +110,55 @@ sudo ./TouchGuard -time 0.2 -blockMovement -movementTime 0.1
 
 ## Testing
 
-There are no automated tests. Testing must be done manually:
+### Automated Tests
+
+The project includes automated tests for build integrity, CLI behavior, and installation scripts.
+
+**Run all tests:**
+```bash
+make test
+```
+
+**Run specific tests:**
+```bash
+make test-install  # Test installation scripts and plist validity
+make test-cli      # Test binary CLI behavior
+```
+
+**Test coverage:**
+- **Installation tests** ([tests/test_install.sh](tests/test_install.sh)):
+  - Verifies install.sh and uninstall.sh exist and are executable
+  - Validates LaunchDaemon plist syntax using `plutil`
+  - Checks plist contains required keys (Label, ProgramArguments, RunAtLoad)
+  - Verifies scripts check for sudo/root permissions
+
+- **CLI tests** ([tests/test_cli.sh](tests/test_cli.sh)):
+  - Tests `-version` flag output
+  - Verifies binary is executable and reasonable size
+  - Tests invalid flag handling (shouldn't crash)
+  - Verifies time and movement code exists in compiled binary
+
+**Test results:** All tests currently pass (19 total tests)
+
+### Manual Testing
+
+Core event-blocking functionality requires manual testing with sudo privileges:
 
 **Testing click blocking (default behavior):**
-1. Build the application
-2. Run with sudo and a test time interval: `sudo ./TouchGuard -time 0.15`
-3. Type on the keyboard and attempt to click/tap the trackpad immediately after
-4. Verify that taps are ignored during the disable interval
-5. Verify that taps work normally after the interval expires
+1. Build: `make build`
+2. Run with sudo: `sudo ./TouchGuard/TouchGuard -time 0.15`
+3. Type on keyboard and attempt to click/tap trackpad immediately after
+4. Verify taps are ignored during the disable interval
+5. Verify taps work normally after interval expires
 6. Test different time intervals to find optimal values
 
 **Testing movement blocking:**
-1. Run with movement blocking enabled: `sudo ./TouchGuard -time 0.2 -blockMovement -movementTime 0.1`
-2. Type on the keyboard and attempt to move the cursor immediately after
-3. Verify that cursor movement is blocked during the movement interval
-4. Verify that cursor movement works normally after the interval expires
-5. Test with different `-movementTime` values (shorter intervals like 0.05-0.15s work well for movement)
-6. Test without `-movementTime` to verify it falls back to the `-time` value
+1. Run: `sudo ./TouchGuard/TouchGuard -time 0.2 -blockMovement -movementTime 0.1`
+2. Type on keyboard and attempt to move cursor immediately after
+3. Verify cursor movement is blocked during the movement interval
+4. Verify cursor movement works normally after interval expires
+5. Test with different `-movementTime` values (0.05-0.15s work well)
+6. Test without `-movementTime` to verify fallback to `-time` value
 
 ## Version Information
 

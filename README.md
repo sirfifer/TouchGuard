@@ -81,6 +81,28 @@ sudo ./TouchGuard/TouchGuard -time 0.2 -blockMovement -movementTime 0.1
 The time interval of 200ms (0.2 seconds) works well for most users. If you're still experiencing issues (cursor jumps while typing) or the trackpad feels unresponsive after typing, adjust the interval up or down as needed.
 
 ----------------
+## Development & Testing
+
+**Build from source:**
+```bash
+make build
+```
+
+**Run tests:**
+```bash
+make test           # Run all tests
+make test-install   # Test installation scripts only
+make test-cli       # Test CLI behavior only
+```
+
+The project includes automated tests for:
+- Installation script validity and plist configuration
+- CLI argument parsing and version output
+- Binary integrity and size checks
+
+See [CLAUDE.md](CLAUDE.md) for detailed testing information and development guidelines.
+
+----------------
 ## Credits
 
 **Original Author**: [Prag Batra (SyntaxSoft)](https://github.com/thesyntaxinator)
