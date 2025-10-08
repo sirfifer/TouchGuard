@@ -162,8 +162,41 @@ Core event-blocking functionality requires manual testing with sudo privileges:
 
 ## Version Information
 
-Current version is defined in [main.c:14-15](TouchGuard/main.c#L14):
+Current version is defined in [main.c:17-19](TouchGuard/main.c#L17):
 - `MAJOR_VERSION = 1`
-- `MINOR_VERSION = 4`
+- `MINOR_VERSION = 5`
+- `PATCH_VERSION = 0`
 
-When updating the version, modify these constants.
+**Semantic Versioning:** This project uses [SemVer](https://semver.org/):
+- MAJOR: Incompatible API changes
+- MINOR: Backwards-compatible new features
+- PATCH: Backwards-compatible bug fixes
+
+When updating the version, modify these constants and create a git tag.
+
+## Release Process
+
+Releases are automated via GitHub Actions. To create a new release:
+
+1. **Update version** in [main.c](TouchGuard/main.c) (lines 17-19)
+2. **Commit changes**: `git commit -am "Bump version to vX.Y.Z"`
+3. **Create and push tag**:
+   ```bash
+   git tag -a vX.Y.Z -m "Release vX.Y.Z"
+   git push origin vX.Y.Z
+   ```
+4. **GitHub Actions** automatically:
+   - Builds the binary
+   - Runs all tests
+   - Creates release package (.tar.gz)
+   - Publishes to GitHub Releases
+   - Generates release notes
+
+**Workflow file:** [.github/workflows/release.yml](.github/workflows/release.yml)
+
+**Release package includes:**
+- TouchGuard binary (compiled for macOS)
+- install.sh, uninstall.sh
+- LaunchDaemon plist configuration
+- README.md, CREDITS.md
+- SHA256 checksum

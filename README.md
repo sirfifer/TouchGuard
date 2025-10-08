@@ -2,24 +2,44 @@
 
 Disables Mac touchpad for a user-specified amount of time each time a key is pressed on the keyboard. This prevents accidental touchpad input (e.g. palm of hand moving over the edge of the touchpad) from being detected as a tap and causing the cursor to jump to a different line while the user is typing.
 
-**Download latest release from [here](https://github.com/thesyntaxinator/TouchGuard/releases)**
+**[Download Latest Release](https://github.com/sirfifer/TouchGuard/releases/latest)** | **[View All Releases](https://github.com/sirfifer/TouchGuard/releases)**
 
-*NOTE: Must be run with administrative privileges.*
+*NOTE: Requires administrative privileges.*
 
 ----------------
-## Quick Install (Recommended)
+## Installation
 
-Download the latest release and run the installer:
+### Quick Install (One Command)
+
+The easiest way to install TouchGuard:
 
 ```bash
-# Navigate to the downloaded folder
-cd path/to/TouchGuard
-
-# Run the installer (will prompt for your password)
-sudo ./install.sh
+curl -fsSL https://raw.githubusercontent.com/sirfifer/TouchGuard/main/scripts/quick-install.sh | sudo bash
 ```
 
-That's it! TouchGuard is now running and will automatically start every time you boot your Mac.
+This downloads and installs the latest version automatically. TouchGuard will start immediately and run automatically on boot.
+
+**To uninstall:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/sirfifer/TouchGuard/main/scripts/quick-uninstall.sh | sudo bash
+```
+
+### Manual Install
+
+If you prefer to download and install manually:
+
+1. **Download** the latest release: [TouchGuard-v1.5.0-macos.tar.gz](https://github.com/sirfifer/TouchGuard/releases/latest)
+2. **Extract** the archive:
+   ```bash
+   tar -xzf TouchGuard-v1.5.0-macos.tar.gz
+   cd TouchGuard-v1.5.0-macos
+   ```
+3. **Install**:
+   ```bash
+   sudo ./install.sh
+   ```
+
+TouchGuard is now running and will automatically start every time you boot your Mac.
 
 **To uninstall:**
 ```bash

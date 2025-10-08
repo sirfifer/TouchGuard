@@ -15,7 +15,8 @@
 #include <dispatch/dispatch.h>
 
 #define MAJOR_VERSION  1
-#define MINOR_VERSION  4
+#define MINOR_VERSION  5
+#define PATCH_VERSION  0
 
 
 #define DISABLE_TAP_PB               1
@@ -259,7 +260,7 @@ int main(int argc, const char * argv[])
         }
         else if(strcasecmp("-version", argv[count]) == 0)
         {
-            printf("Version %d.%d\n",MAJOR_VERSION,MINOR_VERSION);
+            printf("TouchGuard v%d.%d.%d\n",MAJOR_VERSION,MINOR_VERSION,PATCH_VERSION);
         }
         else if(strcasecmp("-TapEnableMsg", argv[count]) == 0)
         {

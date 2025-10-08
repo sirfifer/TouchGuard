@@ -1,0 +1,131 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags like v1.5.0, v2.0.0, etc.
+
+jobs:
+  build-and-release:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up environment
+        run: |
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "Building TouchGuard ${GITHUB_REF#refs/tags/}"
+
+      - name: Build binary
+        run: |
+          cd TouchGuard
+          cc -Wall -Wextra -O2 -o TouchGuard main.c \
+            -framework ApplicationServices \
+            -framework CoreFoundation
+
+          # Verify binary was created
+          if [ ! -f TouchGuard ]; then
+            echo "Error: Binary was not created"
+            exit 1
+          fi
+
+          # Make executable
+          chmod +x TouchGuard
+
+          echo "✓ Binary built successfully"
+          ls -lh TouchGuard
+
+      - name: Run tests
+        run: |
+          chmod +x tests/test_install.sh
+          chmod +x tests/test_cli.sh
+          make test
+
+      - name: Create release package
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/}"
+          PACKAGE_NAME="TouchGuard-${VERSION}-macos"
+
+          # Create package directory
+          mkdir -p "${PACKAGE_NAME}"
+
+          # Copy files to package
+          cp TouchGuard/TouchGuard "${PACKAGE_NAME}/"
+          cp install.sh "${PACKAGE_NAME}/"
+          cp uninstall.sh "${PACKAGE_NAME}/"
+          cp com.syntaxsoft.touchguard.plist "${PACKAGE_NAME}/"
+          cp README.md "${PACKAGE_NAME}/"
+          cp CREDITS.md "${PACKAGE_NAME}/"
+
+          # Make scripts executable
+          chmod +x "${PACKAGE_NAME}/install.sh"
+          chmod +x "${PACKAGE_NAME}/uninstall.sh"
+          chmod +x "${PACKAGE_NAME}/TouchGuard"
+
+          # Create tarball
+          tar -czf "${PACKAGE_NAME}.tar.gz" "${PACKAGE_NAME}"
+
+          # Create checksums
+          shasum -a 256 "${PACKAGE_NAME}.tar.gz" > "${PACKAGE_NAME}.tar.gz.sha256"
+
+          echo "✓ Package created: ${PACKAGE_NAME}.tar.gz"
+          ls -lh "${PACKAGE_NAME}.tar.gz"
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/}"
+
+          # Create release notes
+          cat > release_notes.md << 'EOF'
+          ## TouchGuard ${{ env.RELEASE_VERSION }}
+
+          ### Installation
+
+          **Quick Install (Recommended):**
+          ```bash
+          curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/quick-install.sh | sudo bash
+          ```
+
+          **Manual Install:**
+          1. Download `TouchGuard-${{ env.RELEASE_VERSION }}-macos.tar.gz`
+          2. Extract: `tar -xzf TouchGuard-${{ env.RELEASE_VERSION }}-macos.tar.gz`
+          3. Install: `cd TouchGuard-${{ env.RELEASE_VERSION }}-macos && sudo ./install.sh`
+
+          ### What's Included
+          - TouchGuard binary (compiled for macOS)
+          - install.sh - Installation script with LaunchDaemon setup
+          - uninstall.sh - Clean removal script
+          - LaunchDaemon plist configuration
+          - Documentation
+
+          ### Usage
+          After installation, TouchGuard runs automatically on boot. To customize settings, edit:
+          `/Library/LaunchDaemons/com.syntaxsoft.touchguard.plist`
+
+          See [README.md](https://github.com/${{ github.repository }}/blob/main/README.md) for full documentation.
+          EOF
+
+          echo "✓ Release notes generated"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            TouchGuard-${{ env.RELEASE_VERSION }}-macos.tar.gz
+            TouchGuard-${{ env.RELEASE_VERSION }}-macos.tar.gz.sha256
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release complete
+        run: |
+          echo "========================================="
+          echo "Release ${{ env.RELEASE_VERSION }} Complete!"
+          echo "========================================="
+          echo ""
+          echo "Release page: https://github.com/${{ github.repository }}/releases/tag/${{ env.RELEASE_VERSION }}"

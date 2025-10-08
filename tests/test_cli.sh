@@ -51,7 +51,7 @@ echo ""
 # Test 1: Version flag
 echo "Test 1: -version flag"
 OUTPUT=$("$BINARY" -version 2>&1)
-if echo "$OUTPUT" | grep -q "Version 1.4"; then
+if echo "$OUTPUT" | grep -q "TouchGuard v1.5.0"; then
     pass "Version flag returns correct version"
 else
     fail "Version flag did not return expected version (got: $OUTPUT)"
