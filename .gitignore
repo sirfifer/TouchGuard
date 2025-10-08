@@ -1,0 +1,24 @@
+# Compiled binary
+TouchGuard/TouchGuard
+*.o
+*.dSYM
+
+# Build artifacts
+build/
+*.tar.gz
+*.sha256
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+xcuserdata/
+*.xcworkspace
+!default.xcworkspace
+
+# Temporary files
+*.swp
+*.swo
+*~
