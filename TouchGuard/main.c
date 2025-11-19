@@ -19,15 +19,15 @@
 #define PATCH_VERSION  1
 
 
-#define DISABLE_TAP_PB               1
-#define DISABLE_DEBUG_MESSAGES       2
-#define ENABLE_TAPENABLE_MESSSAGE    4
-#define ENABLE_TAPDISABLE_MESSAGE    8
-// 0x10 = 10 in base-16 (16 in base-10)
-#define ENABLE_TAPIGNORE_MESSAGE   0x10
-#define DISABLE_MOVEMENT           0x20
-#define BLOCK_MOVEMENT_ENABLED     0x40
-#define ENABLE_MOVEMENTIGNORE_MSG  0x80
+// Bitwise flags for application state (mgi_flag)
+#define DISABLE_TAP_PB               1      // 0000 0001: Touchpad clicks are currently disabled
+#define DISABLE_DEBUG_MESSAGES       2      // 0000 0010: Suppress debug output (set by -nodebug)
+#define ENABLE_TAPENABLE_MESSSAGE    4      // 0000 0100: Show "Enabled Tap" message
+#define ENABLE_TAPDISABLE_MESSAGE    8      // 0000 1000: Show "Disabled tap" message
+#define ENABLE_TAPIGNORE_MESSAGE   0x10     // 0001 0000: Show "Ignoring tap" message
+#define DISABLE_MOVEMENT           0x20     // 0010 0000: Cursor movement is currently disabled
+#define BLOCK_MOVEMENT_ENABLED     0x40     // 0100 0000: Feature flag: movement blocking is enabled
+#define ENABLE_MOVEMENTIGNORE_MSG  0x80     // 1000 0000: Show "Ignoring movement" message
 
 
 static int mgi_flag = 0;
@@ -284,6 +284,11 @@ int main(int argc, const char * argv[])
     }
     
     
+    // Create the event tap to intercept system events.
+    // kCGHIDEventTap: Places the tap at the HID system level, before events reach the window server.
+    //                 This allows us to intercept events very early but requires root privileges.
+    // kCGHeadInsertEventTap: Insert the tap at the beginning of the list.
+    // kCGEventTapOptionDefault: The tap is an active filter (can modify/suppress events).
     eventTap = CGEventTapCreate(kCGHIDEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault, kCGEventMaskForAllEvents, eventCallBack, NULL);
     
     if(!eventTap)

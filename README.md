@@ -4,7 +4,19 @@ Disables Mac touchpad for a user-specified amount of time each time a key is pre
 
 **[Download Latest Release](https://github.com/sirfifer/TouchGuard/releases/latest)** | **[View All Releases](https://github.com/sirfifer/TouchGuard/releases)**
 
-*NOTE: Requires administrative privileges.*
+*NOTE: Requires administrative privileges (sudo).*
+
+----------------
+## Permissions & Security
+
+TouchGuard requires **root privileges** (`sudo`) to function. This is because it uses a low-level Event Tap (`kCGHIDEventTap`) to intercept keyboard and mouse events before they reach the window server.
+
+**Why sudo?**
+-   **Reliability**: `kCGHIDEventTap` is the most reliable way to intercept events globally, regardless of which application is focused.
+-   **Alternative**: The alternative is using Accessibility permissions, which requires the user to manually grant permission in System Settings. However, for a LaunchDaemon that runs on boot, `sudo` is the standard and most robust approach.
+
+**Security Note**:
+Since this application runs as root and intercepts all input events, you should only run it if you trust the source. The source code is available for review in this repository.
 
 ----------------
 ## Installation
@@ -169,3 +181,13 @@ This fork adds cursor movement blocking, installation scripts, and LaunchDaemon 
 
 **Original project**: https://github.com/thesyntaxinator/TouchGuard/issues or email syntaxsoftsupport@icloud.com
 
+**Original project**: https://github.com/thesyntaxinator/TouchGuard/issues or email syntaxsoftsupport@icloud.com
+
+----------------
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to submit pull requests, and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for our community standards.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
